@@ -1,0 +1,112 @@
+version: "3.3"
+
+networks:
+  loki:
+
+services:
+  loki:
+    image: grafana/loki:latest
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - loki
+
+  #alloy:
+  #  image: grafana/alloy:latest
+  #  ports:
+  #    - 12345:12345
+  #    - 4317:4317
+  #    - 4318:4318
+  #  volumes:
+  #    - ./alloy/config.alloy.hcl:/etc/alloy/config.alloy
+  #    - /var/run/docker.sock:/var/run/docker.sock
+  #    - /:/rootfs:ro
+  #    - /var/run:/var/run:ro
+  #    - /sys:/sys:ro
+  #    - /var/lib/docker/:/var/lib/docker:ro
+  #    - /dev/disk/:/dev/disk:ro
+  #  command: run --server.http.listen-addr=0.0.0.0:12345 --storage.path=/var/lib/alloy/data /etc/alloy/config.alloy
+  #  networks:
+  #    - loki
+
+  prometheus:
+    image: prom/prometheus:main
+    ports:
+      - "9090:9090"
+    command:
+      - --web.enable-remote-write-receiver
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - loki
+
+  grafana:
+    environment:
+      - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
+      - GF_AUTH_ANONYMOUS_ENABLED=false
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
+      - GF_SERVER_DOMAIN=citygeo-grafana-dev
+      - GF_SERVER_ROOT_URL=https://citygeo-grafana-dev.phila.gov/
+      # Database connection
+      - GF_DATABASE_TYPE=postgres
+      - GF_DATABASE_HOST=grafana-dev.c146mkyiuqn2.us-east-1.rds.amazonaws.com
+      - GF_DATABASE_NAME=postgres
+      - GF_DATABASE_USER=postgres
+      - GF_DATABASE_SSL_MODE=require
+      # Azure AD
+      - GF_AUTH_AZUREAD_NAME=Azure AD
+      - GF_AUTH_AZUREAD_ENABLED=false
+      - GF_AUTH_AZUREAD_ALLOW_SIGN_UP=true
+      - GF_AUTH_AZUREAD_AUTO_LOGIN=false
+      - GF_AUTH_AZUREAD_CLIENT_AUTHENTICATION=client_secret_post
+      - GF_AUTH_AZUREAD_CLIENT_ID=a25ce667-a572-4cd1-bfdb-6df6a7527708
+      - GF_AUTH_AZUREAD_SCOPES=openid email profile
+      - GF_AUTH_AZUREAD_AUTH_URL=https://login.microsoftonline.com/2046864f-68ea-497d-af34-a6629a6cd700/oauth2/v2.0/authorize
+      - GF_AUTH_AZUREAD_TOKEN_URL=https://login.microsoftonline.com/2046864f-68ea-497d-af34-a6629a6cd700/oauth2/v2.0/token
+    entrypoint:
+      - sh
+      - -euc
+      - |
+        mkdir -p /etc/grafana/provisioning/datasources
+        cat <<EOF > /etc/grafana/provisioning/datasources/ds.yaml
+        apiVersion: 1
+        datasources:
+        - name: Loki
+          type: loki
+          access: proxy
+          orgId: 1
+          url: http://loki:3100
+          basicAuth: false
+          isDefault: true
+          version: 1
+          editable: false
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          orgId: 1
+          url: http://prometheus:9090
+          basicAuth: false
+          isDefault: false
+          version: 1
+          editable: false
+        EOF
+        export GF_DATABASE_PASSWORD=`cat /run/secrets/db_password`
+        export GF_AUTH_AZUREAD_CLIENT_SECRET=`cat /run/secrets/azuread_client_secret`
+        /run.sh
+    image: grafana/grafana:latest
+    ports:
+      - "80:3000"
+    secrets:
+      - db_password
+      - azuread_client_secret
+    networks:
+      - loki
+
+secrets:
+  db_password:
+    environment: GRF_DB_PASSWORD
+  azuread_client_secret:
+    environment: AZUREAD_CLIENT_SECRET
