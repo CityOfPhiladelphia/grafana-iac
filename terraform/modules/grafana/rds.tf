@@ -20,6 +20,7 @@ resource "aws_db_instance" "postgres" {
   kms_key_id                 = data.aws_ssm_parameter.kms_arn.value
   deletion_protection        = !var.dev_mode
   instance_class             = "db.t4g.micro"
+  vpc_security_group_ids     = [aws_security_group.rds.id]
 
   tags = local.default_tags
 }
