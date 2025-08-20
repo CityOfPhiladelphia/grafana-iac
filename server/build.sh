@@ -13,6 +13,8 @@ sudo chmod +x /usr/local/bin/docker-compose
 # TODO: Put these all in SSM parameter store
 # TODO: How do we get the loki-config.yaml file updated?
 sudo -u ec2-user -i <<'EOF'
+# -i logs us in as shell so our pwd gets reset
+cd ~/grafana-iac/server
 # DB
 export GF_DATABASE_HOST=`aws ssm get-parameter --name /grafana/prd/rds_host --query "Parameter.Value" --output text`
 export GF_DATABASE_NAME=`aws ssm get-parameter --name /grafana/prd/rds_db_name --query "Parameter.Value" --output text`
@@ -25,7 +27,7 @@ export GF_AUTH_AZUREAD_AUTH_URL=a
 export GF_AUTH_AZUREAD_TOKEN_URL=a
 # Update loki-config.yaml with correct s3 bucket name
 export LOKI_S3_BUCKET=`aws ssm get-parameter --name /grafana/prd/grafana_s3_name --query "Parameter.Value" --output text`
-envsubst < ./server/docker/loki/loki-config-template.yaml > ./server/docker/loki/loki-config.yaml
+envsubst < docker/loki/loki-config-template.yaml > docker/loki/loki-config.yaml
 # Now, docker compose
-docker-compose up -d
+docker-compose -f docker/docker-compose.yaml up -d
 EOF
