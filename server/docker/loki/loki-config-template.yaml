@@ -41,7 +41,7 @@ schema_config:
 storage_config:
   aws:
     s3: s3://us-east-1
-    bucketnames: citygeo-grafana-dev
+    bucketnames: $LOKI_S3_BUCKET
   tsdb_shipper:
     active_index_directory: /loki/index
     cache_location: /loki/index_cache

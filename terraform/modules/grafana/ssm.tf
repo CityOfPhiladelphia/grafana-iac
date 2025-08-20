@@ -11,3 +11,21 @@ resource "aws_ssm_parameter" "rds_user" {
   type   = "SecureString"
   key_id = data.aws_ssm_parameter.kms_id.value
 }
+
+resource "aws_ssm_parameter" "rds_host" {
+  name  = "/${var.app_name}/${var.env_name}/rds_host"
+  value = aws_db_instance.postgres.endpoint
+  type  = "String"
+}
+
+resource "aws_ssm_parameter" "rds_db_name" {
+  name  = "/${var.app_name}/${var.env_name}/rds_db_name"
+  value = aws_db_instance.postgres.db_name
+  type  = "String"
+}
+
+resource "aws_ssm_parameter" "grafana_s3_name" {
+  name  = "/${var.app_name}/${var.env_name}/grafana_s3_name"
+  value = aws_s3_bucket.main.bucket
+  type  = "String"
+}

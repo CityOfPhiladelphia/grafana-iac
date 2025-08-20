@@ -30,6 +30,7 @@ module "grafana" {
   # Prod subnet private zone A then B
   db_subnet_ids  = ["subnet-0d0d5a4bdbaf916d1", "subnet-00eb4cfd73abefd2e"]
   alb_subnet_ids = ["subnet-0d0d5a4bdbaf916d1", "subnet-00eb4cfd73abefd2e"]
+  asg_subnet_ids = ["subnet-0d0d5a4bdbaf916d1", "subnet-00eb4cfd73abefd2e"]
   # Citygeo test vpc, citygeo prod vpc, mulesoft dev vpc, mulesoft prod vpc
   monitoring_source_cidrs = {
     citygeotestvpc = {
@@ -51,4 +52,7 @@ module "grafana" {
   }
   # EC2
   ec2_instance_type = "t3.large"
+  ssh_key_name      = "eks-grafana"
+  # prod remote SG
+  ssh_sg_id = "sg-0ef9b74fa74804bcb"
 }

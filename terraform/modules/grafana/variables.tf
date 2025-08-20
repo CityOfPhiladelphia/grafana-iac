@@ -25,6 +25,10 @@ variable "alb_subnet_ids" {
   type = list(string)
 }
 
+variable "asg_subnet_ids" {
+  type = list(string)
+}
+
 # ALB
 variable "monitoring_source_cidrs" {
   type = map(object({
@@ -38,3 +42,14 @@ variable "monitoring_source_cidrs" {
 variable "ec2_instance_type" {
   type = string
 }
+
+variable "ssh_key_name" {
+  type = string
+}
+
+variable "ssh_sg_id" {
+  type = string
+}
+
+## Provisioner
+
