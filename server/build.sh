@@ -1,3 +1,9 @@
+export APP_NAME=$1
+export ENV_NAME=$2
+# Set hostname to `app-env-{old hostname}`
+sudo hostnamectl hostname "${APP_NAME}-${ENV_NAME}-$(hostnamectl hostname)"
+# Make sure we are in the "server" folder
+cd ~/grafana-iac/server
 # This script is to be run as ec2-user, not as root
 # Install docker
 sudo dnf install -y docker
@@ -10,16 +16,14 @@ sudo systemctl enable docker
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 # Run all these commands as ec2-user (required because it establishes new docker group)
-# TODO: Put these all in SSM parameter store
-# TODO: How do we get the loki-config.yaml file updated?
 sudo -u ec2-user -i <<'EOF'
 # -i logs us in as shell so our pwd gets reset
 cd ~/grafana-iac/server
 # DB
-export GF_DATABASE_HOST=`aws ssm get-parameter --name /grafana/prd/rds_host --query "Parameter.Value" --output text`
-export GF_DATABASE_NAME=`aws ssm get-parameter --name /grafana/prd/rds_db_name --query "Parameter.Value" --output text`
-export GF_DATABASE_USER=`aws ssm get-parameter --name /grafana/prd/rds_user --with-decryption --query "Parameter.Value" --output text`
-export GF_DATABASE_PASSWORD=`aws ssm get-parameter --name /grafana/prd/rds_pw --with-decryption --query "Parameter.Value" --output text`
+export GF_DATABASE_HOST=`aws ssm get-parameter --name /$APP_NAME/$ENV_NAME/rds_host --query "Parameter.Value" --output text`
+export GF_DATABASE_NAME=`aws ssm get-parameter --name /$APP_NAME/$ENV_NAME/rds_db_name --query "Parameter.Value" --output text`
+export GF_DATABASE_USER=`aws ssm get-parameter --name /$APP_NAME/$ENV_NAME/rds_user --with-decryption --query "Parameter.Value" --output text`
+export GF_DATABASE_PASSWORD=`aws ssm get-parameter --name /$APP_NAME/$ENV_NAME/rds_pw --with-decryption --query "Parameter.Value" --output text`
 # Entra ID
 export GF_AUTH_AZUREAD_CLIENT_ID=a
 export GF_AUTH_AZUREAD_CLIENT_SECRET=a
@@ -31,3 +35,17 @@ envsubst < docker/loki/loki-config-template.yaml > docker/loki/loki-config.yaml
 # Now, docker compose
 docker-compose -f docker/docker-compose.yaml up -d
 EOF
+
+# Good! Loki, Grafana, and Prometheus are now up and running. Time to install alloy for local monitoring
+# Alloy cannot be installed until its gpg key is imported
+wget -q -O gpg.key https://rpm.grafana.com/gpg.key
+sudo rpm --import gpg.key
+echo -e '[grafana]\nname=grafana\nbaseurl=https://rpm.grafana.com\nrepo_gpgcheck=1\nenabled=1\ngpgcheck=1\ngpgkey=https://rpm.grafana.com/gpg.key\nsslverify=1\nsslcacert=/etc/pki/tls/certs/ca-bundle.crt' | sudo tee /etc/yum.repos.d/grafana.repo
+# Install alloy
+sudo yum update -y
+sudo dnf install -y alloy
+# Copy our config into the right file
+sudo cp alloy/config.alloy.hcl /etc/alloy/config.alloy
+# Start alloy!
+sudo systemctl start alloy
+sudo systemctl enable alloy.service
