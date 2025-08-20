@@ -16,7 +16,7 @@ sudo systemctl enable docker
 sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 # Run all these commands as ec2-user (required because it establishes new docker group)
-sudo -u ec2-user -i <<'EOF'
+sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
 # -i logs us in as shell so our pwd gets reset
 cd ~/grafana-iac/server
 # DB
