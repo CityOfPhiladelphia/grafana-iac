@@ -55,7 +55,7 @@ resource "aws_launch_template" "main" {
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 dnf install -y git
 sudo -u ec2-user bash -c 'cd ~; git clone https://github.com/CityOfPhiladelphia/grafana-iac.git'
-sudo -u ec2-user bash -c 'cd ~/grafana-iac; get checkout ${var.build_branch}; bash server/build.sh ${var.app_name} ${var.env_name}'
+sudo -u ec2-user bash -c 'cd ~/grafana-iac; git checkout ${var.build_branch}; bash server/build.sh ${var.app_name} ${var.env_name}'
 EOF
   )
 
@@ -79,5 +79,10 @@ resource "aws_autoscaling_group" "main" {
   launch_template {
     id      = aws_launch_template.main.id
     version = "$Default"
+  }
+
+  # Terraform offloads ASG size
+  lifecycle {
+    ignore_changes = [min_size, max_size]
   }
 }

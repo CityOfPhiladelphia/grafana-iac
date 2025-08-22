@@ -11,7 +11,7 @@ resource "aws_iam_policy" "kms" {
           "kms:Decrypt",
           "kms:Encrypt",
           "kms:DescribeKey",
-          "kms:GenerateKeyData",
+          "kms:GenerateDataKey",
           "kms:GenerateDataKeyPair*",
         ]
         Effect   = "Allow"
