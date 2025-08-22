@@ -12,6 +12,34 @@ resource "aws_ssm_parameter" "rds_user" {
   key_id = data.aws_ssm_parameter.kms_id.value
 }
 
+resource "aws_ssm_parameter" "loki_pw" {
+  name   = "/${var.app_name}/${var.env_name}/loki_pw"
+  value  = data.secretsmanager_login.loki_basic.password
+  type   = "SecureString"
+  key_id = data.aws_ssm_parameter.kms_id.value
+}
+
+resource "aws_ssm_parameter" "loki_user" {
+  name   = "/${var.app_name}/${var.env_name}/loki_user"
+  value  = data.secretsmanager_login.loki_basic.login
+  type   = "SecureString"
+  key_id = data.aws_ssm_parameter.kms_id.value
+}
+
+resource "aws_ssm_parameter" "prometheus_pw" {
+  name   = "/${var.app_name}/${var.env_name}/prometheus_pw"
+  value  = data.secretsmanager_login.prometheus_basic.password
+  type   = "SecureString"
+  key_id = data.aws_ssm_parameter.kms_id.value
+}
+
+resource "aws_ssm_parameter" "prometheus_user" {
+  name   = "/${var.app_name}/${var.env_name}/prometheus_user"
+  value  = data.secretsmanager_login.prometheus_basic.login
+  type   = "SecureString"
+  key_id = data.aws_ssm_parameter.kms_id.value
+}
+
 resource "aws_ssm_parameter" "rds_host" {
   name  = "/${var.app_name}/${var.env_name}/rds_host"
   value = aws_db_instance.postgres.endpoint

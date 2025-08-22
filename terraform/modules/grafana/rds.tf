@@ -19,6 +19,7 @@ resource "aws_db_instance" "postgres" {
   storage_encrypted          = true
   kms_key_id                 = data.aws_ssm_parameter.kms_arn.value
   deletion_protection        = !var.dev_mode
+  skip_final_snapshot        = var.dev_mode
   instance_class             = "db.t4g.micro"
   vpc_security_group_ids     = [aws_security_group.rds.id]
 

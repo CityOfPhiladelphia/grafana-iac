@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
-resource "aws_kms_key" "grafana" {
-  description = "grafana"
+resource "aws_kms_key" "common" {
+  description = "${var.app_name} common"
   key_usage   = "ENCRYPT_DECRYPT"
   policy = jsonencode({
     Version = "2012-10-17"
@@ -56,19 +56,19 @@ resource "aws_kms_key" "grafana" {
   tags = local.default_tags
 }
 
-resource "aws_kms_alias" "grafana" {
-  name          = "alias/grafana"
-  target_key_id = aws_kms_key.grafana.key_id
+resource "aws_kms_alias" "common" {
+  name          = "alias/${var.app_name}"
+  target_key_id = aws_kms_key.common.key_id
 }
 
 resource "aws_ssm_parameter" "kms_arn" {
-  name  = "/grafana/common/kms_arn"
-  value = aws_kms_key.grafana.arn
+  name  = "/${var.app_name}/common/kms_arn"
+  value = aws_kms_key.common.arn
   type  = "String"
 }
 
 resource "aws_ssm_parameter" "kms_id" {
-  name  = "/grafana/common/kms_id"
-  value = aws_kms_key.grafana.key_id
+  name  = "/${var.app_name}/common/kms_id"
+  value = aws_kms_key.common.key_id
   type  = "String"
 }

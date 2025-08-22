@@ -6,8 +6,9 @@ networks:
 services:
   loki:
     image: grafana/loki:latest
-    ports:
-      - "3100:3100"
+    # Expose loki port internally so nginx can access it
+    expose:
+      - "3100"
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
     command: -config.file=/etc/loki/local-config.yaml
@@ -16,13 +17,34 @@ services:
 
   prometheus:
     image: prom/prometheus:main
-    ports:
-      - "9090:9090"
+    # Expose prometheus port internally so nginx can access it
+    expose:
+      - "9090"
     command:
       - --web.enable-remote-write-receiver
       - --config.file=/etc/prometheus/prometheus.yml
     networks:
       - loki
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "3100:3100"
+      - "9090:9090"
+    environment:
+      - LOKI_USER
+      - LOKI_PASS
+      - PROM_USER
+      - PROM_PASS
+    volumes:
+      - ./nginx/.htpasswd.loki:/etc/nginx/.htpasswd.loki
+      - ./nginx/.htpasswd.prometheus:/etc/nginx/.htpasswd.prometheus
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - loki
+    depends_on:
+      - loki
+      - prometheus
 
   grafana:
     environment:
@@ -34,6 +56,10 @@ services:
       - GF_SERVER_ROOT_URL=https://citygeo-grafana-dev.phila.gov/
       # Database connection
       - GF_DATABASE_TYPE=postgres
+      # EMPTY VALUES ON THE RIGHT MEANS THAT IT WILL PULL IN THE ENVIRONMENT
+      # FROM THE HOST. So, if you the machine running docker-compose has
+      # GF_DATABASE_HOST env variable set to "abcd", then this will carry
+      # through to the Grafana docker container.
       - GF_DATABASE_HOST
       - GF_DATABASE_NAME
       - GF_DATABASE_USER
