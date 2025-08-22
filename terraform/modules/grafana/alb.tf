@@ -49,7 +49,7 @@ resource "aws_lb_target_group" "prometheus" {
 
   health_check {
     enabled = true
-    path    = "/-/health"
+    path    = "/-/healthy"
   }
 }
 
