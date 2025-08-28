@@ -24,8 +24,8 @@ resource "aws_lb_target_group" "loki" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
-  # Grafana doesn't have many long running requests so 1 minute should be enough
-  deregistration_delay = 60
+  # Loki request might be slightly longer so we increase to 90
+  deregistration_delay = 90
 
   health_check {
     enabled = true
@@ -44,8 +44,8 @@ resource "aws_lb_target_group" "prometheus" {
   protocol    = "HTTP"
   vpc_id      = var.vpc_id
   target_type = "instance"
-  # Grafana doesn't have many long running requests so 1 minute should be enough
-  deregistration_delay = 60
+  # Prometheus request might be slighlty longer so we increase to 90
+  deregistration_delay = 90
 
   health_check {
     enabled = true
@@ -71,12 +71,28 @@ resource "aws_lb" "main" {
 
 resource "aws_lb_listener" "grafana" {
   load_balancer_arn = aws_lb.main.arn
-  port              = "80"
-  protocol          = "HTTP"
+  port              = "443"
+  protocol          = "HTTPS"
 
   default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.grafana.arn
+  }
+}
+
+resource "aws_lb_listener" "http_redirect" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "80"
+  protocol          = "HTTP"
+
+  default_action {
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 

@@ -32,7 +32,7 @@ module "grafana" {
   source = "../../modules/grafana"
 
   env_name = "prd"
-  dev_mode = true
+  dev_mode = false
   # Prod vpc
   vpc_id = "vpc-047bfd23682f9582f"
   # Prod subnet private zone A then B
