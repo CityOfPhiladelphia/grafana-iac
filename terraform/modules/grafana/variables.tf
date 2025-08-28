@@ -29,6 +29,10 @@ variable "asg_subnet_ids" {
   type = list(string)
 }
 
+variable "acm_cert_arn" {
+  type = string
+}
+
 # ALB
 variable "monitoring_source_cidrs" {
   type = map(object({
