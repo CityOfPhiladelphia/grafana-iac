@@ -72,6 +72,28 @@ resource "aws_iam_policy" "ssm" {
   tags = local.default_tags
 }
 
+// Assume role
+resource "aws_iam_policy" "sts" {
+  name        = "${var.app_name}-${var.env_name}-sts-assume-role"
+  description = "Assumes a role in CityGeo AWS account"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+
+    Statement = [
+      {
+        Action = [
+          "sts:AssumeRole",
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:iam::880708401960:role/GrafanaMonitoringAssumedRole"
+      }
+    ]
+  })
+
+  tags = local.default_tags
+}
+
 // EC2 role
 resource "aws_iam_role" "ec2" {
   name = "${var.app_name}-${var.env_name}-ec2"
@@ -103,6 +125,9 @@ resource "aws_iam_role_policy_attachments_exclusive" "ec2" {
   policy_arns = [
     aws_iam_policy.kms.arn,
     aws_iam_policy.s3.arn,
-    aws_iam_policy.ssm.arn
+    aws_iam_policy.ssm.arn,
+    aws_iam_policy.sts.arn,
+    "arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess",
+    "arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess"
   ]
 }
