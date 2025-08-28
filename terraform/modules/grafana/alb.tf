@@ -101,7 +101,9 @@ resource "aws_lb_listener" "http_redirect" {
 resource "aws_lb_listener" "loki" {
   load_balancer_arn = aws_lb.main.arn
   port              = "3100"
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_cert_arn
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
 
   default_action {
     type             = "forward"
@@ -112,7 +114,9 @@ resource "aws_lb_listener" "loki" {
 resource "aws_lb_listener" "prometheus" {
   load_balancer_arn = aws_lb.main.arn
   port              = "9090"
-  protocol          = "HTTP"
+  protocol          = "HTTPS"
+  certificate_arn   = var.acm_cert_arn
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
 
   default_action {
     type             = "forward"
