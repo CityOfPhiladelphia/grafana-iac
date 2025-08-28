@@ -21,8 +21,8 @@ export LOKI_USER=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/loki_user"
 export LOKI_PASSWORD=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/loki_pw" --with-decryption --query "Parameter.Value" --output text)
 export PROMETHEUS_USER=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/prometheus_user" --with-decryption --query "Parameter.Value" --output text)
 export PROMETHEUS_PASSWORD=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/prometheus_pw" --with-decryption --query "Parameter.Value" --output text)
-htpasswd -cBb ./nginx/.htpasswd.loki $LOKI_USER $LOKI_PASSWORD
-htpasswd -cBb ./nginx/.htpasswd.prometheus $PROMETHEUS_USER $PROMETHEUS_PASSWORD
+htpasswd -cBb ./docker/nginx/.htpasswd.loki $LOKI_USER $LOKI_PASSWORD
+htpasswd -cBb ./docker/nginx/.htpasswd.prometheus $PROMETHEUS_USER $PROMETHEUS_PASSWORD
 # Run all these commands as ec2-user (required because it establishes new docker group)
 sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
 # -i logs us in as shell so our pwd gets reset
