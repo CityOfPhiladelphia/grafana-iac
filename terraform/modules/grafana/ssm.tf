@@ -57,3 +57,9 @@ resource "aws_ssm_parameter" "grafana_s3_name" {
   value = aws_s3_bucket.main.bucket
   type  = "String"
 }
+
+resource "aws_ssm_parameter" "domain_name" {
+  name  = "/${var.app_name}/${var.env_name}/domain_name"
+  value = var.domain_name
+  type  = "String"
+}
