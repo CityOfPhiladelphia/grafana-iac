@@ -35,6 +35,7 @@ module "grafana" {
   dev_mode = false
   # *.phila.gov
   acm_cert_arn = "arn:aws:acm:us-east-1:975050025792:certificate/dc0c25c0-84e6-45aa-90b5-590f8bd8296c"
+  domain_name  = "citygeo-grafana.phila.gov"
   # Prod vpc
   vpc_id = "vpc-047bfd23682f9582f"
   # Prod subnet private zone A then B

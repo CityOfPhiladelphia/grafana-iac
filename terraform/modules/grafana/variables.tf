@@ -12,6 +12,10 @@ variable "dev_mode" {
   description = "Enable to disable any type of deletion protection"
 }
 
+variable "domain_name" {
+  type = string
+}
+
 # VPC
 variable "vpc_id" {
   type = string
