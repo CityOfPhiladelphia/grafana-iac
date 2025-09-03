@@ -34,7 +34,7 @@ export GF_DATABASE_USER=`aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/rds_
 export GF_DATABASE_PASSWORD=`aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/rds_pw" --with-decryption --query "Parameter.Value" --output text`
 # DNS
 export GF_SERVER_DOMAIN=`aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/domain_name" --query "Parameter.Value" --output text`
-export GF_SERVER_PROTOCOL=https
+export GF_SERVER_ROOT_URL="https://$GF_SERVER_DOMAIN/"
 # Update loki-config.yaml with correct s3 bucket name
 export LOKI_S3_BUCKET=`aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/grafana_s3_name" --query "Parameter.Value" --output text`
 envsubst < docker/loki/loki-config-template.yaml > docker/loki/loki-config.yaml
