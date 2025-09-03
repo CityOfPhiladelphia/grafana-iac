@@ -53,7 +53,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
       - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
       - GF_SERVER_DOMAIN
-      - GF_SERVER_ROOT_URL
+      - GF_SERVER_PROTOCOL
       # Database connection
       - GF_DATABASE_TYPE=postgres
       # EMPTY VALUES ON THE RIGHT MEANS THAT IT WILL PULL IN THE ENVIRONMENT
