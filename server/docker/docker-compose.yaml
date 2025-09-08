@@ -54,6 +54,9 @@ services:
       - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
       - GF_SERVER_DOMAIN
       - GF_SERVER_ROOT_URL
+      # Custom plugin install
+      - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=weastie-anypointmonitoring-datasource
+      - GF_PLUGINS_PREINSTALL=weastie-anypointmonitoring-datasource@0.0.2@https://github.com/CityOfPhiladelphia/AnypointMonitoringGrafanaDatasource/releases/download/untagged-489534b46967585e4129/weastie-anypointmonitoring-datasource-0.0.2.zip
       # Database connection
       - GF_DATABASE_TYPE=postgres
       # EMPTY VALUES ON THE RIGHT MEANS THAT IT WILL PULL IN THE ENVIRONMENT
@@ -65,6 +68,7 @@ services:
       - GF_DATABASE_USER
       - GF_DATABASE_SSL_MODE=require
       - GF_DATABASE_PASSWORD
+      -
       # Azure AD
       - GF_AUTH_AZUREAD_NAME=Azure AD
       - GF_AUTH_AZUREAD_ENABLED=false
