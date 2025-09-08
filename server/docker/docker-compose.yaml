@@ -56,7 +56,7 @@ services:
       - GF_SERVER_ROOT_URL
       # Custom plugin install
       - GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS=weastie-anypointmonitoring-datasource
-      - GF_PLUGINS_PREINSTALL=weastie-anypointmonitoring-datasource@0.0.2@https://github.com/CityOfPhiladelphia/AnypointMonitoringGrafanaDatasource/releases/download/untagged-489534b46967585e4129/weastie-anypointmonitoring-datasource-0.0.2.zip
+      - GF_PLUGINS_PREINSTALL=weastie-anypointmonitoring-datasource@0.0.2@https://github.com/CityOfPhiladelphia/AnypointMonitoringGrafanaDatasource/releases/download/v0.0.2/weastie-anypointmonitoring-datasource-0.0.2.zip
       # Database connection
       - GF_DATABASE_TYPE=postgres
       # EMPTY VALUES ON THE RIGHT MEANS THAT IT WILL PULL IN THE ENVIRONMENT
