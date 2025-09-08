@@ -64,7 +64,7 @@ module "grafana" {
   # EC2
   ec2_instance_type = "t3.large"
   ssh_key_name      = "eks-grafana"
-  build_branch      = "install-custom-plugin"
+  build_branch      = "main"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
 }
