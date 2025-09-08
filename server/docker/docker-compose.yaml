@@ -15,16 +15,25 @@ services:
     networks:
       - loki
 
-  prometheus:
-    image: prom/prometheus:main
-    # Expose prometheus port internally so nginx can access it
+  #prometheus:
+  #  image: prom/prometheus:main
+  #  # Expose prometheus port internally so nginx can access it
+  #  expose:
+  #    - "9090"
+  #  command:
+  #    - --web.enable-remote-write-receiver
+  #    - --config.file=/etc/prometheus/prometheus.yml
+  #  networks:
+  #    - loki
+
+  mimir:
+    image: grafana/mimir:latest
+    # Expose mimir port internally so nginx can access it
+    volumes:
+      - ./mimir/mimir.yaml:/etc/mimir.yaml
+    command: -config.file=/etc/mimir.yaml
     expose:
       - "9090"
-    command:
-      - --web.enable-remote-write-receiver
-      - --config.file=/etc/prometheus/prometheus.yml
-    networks:
-      - loki
 
   nginx:
     image: nginx:latest
@@ -44,7 +53,7 @@ services:
       - loki
     depends_on:
       - loki
-      - prometheus
+      - mimir
 
   grafana:
     environment:

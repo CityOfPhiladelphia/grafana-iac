@@ -1,0 +1,19 @@
+common:
+  storage:
+    backend: s3
+    s3:
+      endpoint: s3.us-east-1.amazonaws.com
+      region: us-east-1
+      bucket_name: $LOKI_S3_BUCKET
+
+blocks_storage:
+  storage_prefix: mimirblocks
+
+alertmanager_storage:
+  storage_prefix: mimiralertmanager
+
+ruler_storage:
+  storage_prefix: mimirruler
+
+server:
+  http_listen_port: 9090
