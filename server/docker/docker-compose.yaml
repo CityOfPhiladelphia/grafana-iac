@@ -68,7 +68,6 @@ services:
       - GF_DATABASE_USER
       - GF_DATABASE_SSL_MODE=require
       - GF_DATABASE_PASSWORD
-      -
       # Azure AD
       - GF_AUTH_AZUREAD_NAME=Azure AD
       - GF_AUTH_AZUREAD_ENABLED=false
