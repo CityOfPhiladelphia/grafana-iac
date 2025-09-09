@@ -1,3 +1,6 @@
+# monolith mode
+target: all
+
 common:
   storage:
     backend: s3

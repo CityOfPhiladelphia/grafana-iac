@@ -36,6 +36,7 @@ services:
       - "8080"
     ports:
       - "9095:9095"
+      - "7946:7946"
     networks:
       - loki
 
