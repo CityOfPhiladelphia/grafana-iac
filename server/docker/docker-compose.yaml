@@ -34,6 +34,9 @@ services:
     command: -config.file=/etc/mimir.yaml
     expose:
       - "9090"
+      - "9095"
+    networks:
+      - loki
 
   nginx:
     image: nginx:latest
