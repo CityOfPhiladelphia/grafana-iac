@@ -1,6 +1,10 @@
 # monolith mode
 target: all
 
+ingester:
+  ring:
+    replication_factor: 1
+
 common:
   storage:
     backend: s3
