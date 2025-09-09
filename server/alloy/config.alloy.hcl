@@ -76,7 +76,11 @@ prometheus.scrape "scraper" {
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://localhost:9090/api/v1/write"
+    url = "http://localhost:8080/api/v1/push"
+
+    headers = {
+      "X-Scope-OrgID" = "main",
+    }
   }
 }
 

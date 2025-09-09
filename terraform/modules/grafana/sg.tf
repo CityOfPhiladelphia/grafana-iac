@@ -64,6 +64,16 @@ resource "aws_vpc_security_group_ingress_rule" "ec2_inbound_prometheus_from_alb"
   referenced_security_group_id = aws_security_group.alb.id
 }
 
+resource "aws_vpc_security_group_ingress_rule" "ec2_inbound_mimir_from_ec2" {
+  security_group_id = aws_security_group.ec2.id
+  description       = "Inbound mimir access from other ec2"
+
+  ip_protocol                  = "tcp"
+  from_port                    = 9095
+  to_port                      = 9095
+  referenced_security_group_id = aws_security_group.ec2.id
+}
+
 // ALB security group
 resource "aws_security_group" "alb" {
   name        = "${var.app_name}-${var.env_name}-alb"
