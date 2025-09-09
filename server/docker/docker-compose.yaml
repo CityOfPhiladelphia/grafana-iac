@@ -33,7 +33,7 @@ services:
       - ./mimir/mimir.yaml:/etc/mimir.yaml
     command: -config.file=/etc/mimir.yaml
     expose:
-      - "9090"
+      - "8080"
       - "9095"
     networks:
       - loki
