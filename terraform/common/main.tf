@@ -7,9 +7,15 @@ terraform {
       version = "~> 6.0"
     }
   }
+  cloud {
+    organization = "Philadelphia"
+
+    workspaces {
+      name = "grafana-common"
+    }
+  }
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "mulesoft"
+  region = "us-east-1"
 }
