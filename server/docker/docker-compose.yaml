@@ -1,68 +1,8 @@
-version: "3.3"
-
-networks:
-  loki:
+name: Grafana
 
 services:
-  loki:
-    image: grafana/loki:latest
-    # Expose loki port internally so nginx can access it
-    expose:
-      - "3100"
-    volumes:
-      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
-    command: -config.file=/etc/loki/local-config.yaml
-    networks:
-      - loki
-
-  #prometheus:
-  #  image: prom/prometheus:main
-  #  # Expose prometheus port internally so nginx can access it
-  #  expose:
-  #    - "9090"
-  #  command:
-  #    - --web.enable-remote-write-receiver
-  #    - --config.file=/etc/prometheus/prometheus.yml
-  #  networks:
-  #    - loki
-
-  mimir:
-    image: grafana/mimir:latest
-    # Expose mimir port internally so nginx can access it
-    environment:
-      - MIMIR_MODE=all
-    volumes:
-      - ./mimir/mimir.yaml:/etc/mimir.yaml
-    command: -config.file=/etc/mimir.yaml
-    expose:
-      - "8080"
-    ports:
-      - "9095:9095"
-      - "7946:7946"
-    networks:
-      - loki
-
-  nginx:
-    image: nginx:latest
-    ports:
-      - "3100:3100"
-      - "9090:9090"
-    environment:
-      - LOKI_USER
-      - LOKI_PASS
-      - PROM_USER
-      - PROM_PASS
-    volumes:
-      - ./nginx/.htpasswd.loki:/etc/nginx/.htpasswd.loki
-      - ./nginx/.htpasswd.prometheus:/etc/nginx/.htpasswd.prometheus
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    networks:
-      - loki
-    depends_on:
-      - loki
-      - mimir
-
   grafana:
+    image: grafana/grafana:12.2.1
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=false
@@ -95,6 +35,10 @@ services:
       - GF_AUTH_AZUREAD_SCOPES=openid email profile
       - GF_AUTH_AZUREAD_AUTH_URL
       - GF_AUTH_AZUREAD_TOKEN_URL
+    ports:
+      - "80:3000"
+    networks:
+      - loki
     entrypoint:
       - sh
       - -euc
@@ -114,8 +58,69 @@ services:
           editable: false
         EOF
         /run.sh
-    image: grafana/grafana:latest
-    ports:
-      - "80:3000"
+    restart: always
+
+  loki:
+    image: grafana/loki:3.5.5
+    # Expose loki port internally so nginx can access it
+    volumes:
+      - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
     networks:
       - loki
+    command: -config.file=/etc/loki/local-config.yaml
+    restart: always
+    expose:
+      - "3100"
+
+  #prometheus:
+  #  image: prom/prometheus:main
+  #  # Expose prometheus port internally so nginx can access it
+  #  expose:
+  #    - "9090"
+  #  command:
+  #    - --web.enable-remote-write-receiver
+  #    - --config.file=/etc/prometheus/prometheus.yml
+  #  networks:
+  #    - loki
+
+  mimir:
+    image: grafana/mimir:2.17.1
+    # Expose mimir port internally so nginx can access it
+    volumes:
+      - ./mimir/mimir.yaml:/etc/mimir.yaml
+    environment:
+      - MIMIR_MODE=all
+    ports:
+      - "7946:7946"
+      - "9095:9095"
+    networks:
+      - loki
+    command: -config.file=/etc/mimir.yaml
+    restart: always
+    expose:
+      - "8080"
+
+  nginx:
+    # dclint disable-line
+    image: nginx:stable
+    depends_on:
+      - loki
+      - mimir
+    volumes:
+      - ./nginx/.htpasswd.loki:/etc/nginx/.htpasswd.loki
+      - ./nginx/.htpasswd.prometheus:/etc/nginx/.htpasswd.prometheus
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    environment:
+      - LOKI_USER
+      - LOKI_PASS
+      - PROM_USER
+      - PROM_PASS
+    ports:
+      - "3100:3100"
+      - "9090:9090"
+    networks:
+      - loki
+    restart: always
+
+networks:
+  loki:
