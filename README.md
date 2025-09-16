@@ -40,10 +40,10 @@ The `servers/build.sh` script is a bit longer, it takes about 3 minutes to run a
 
 AWS infrastructure is deployed with Terraform. Although the application stack is currently deployed as a monolithic server, the AWS infrastructure was still designed in a way to enable future migration to a clustered Kuberenetes stack.
 
-## Architecture Diagram
+#### Architecture Diagram
 
 ![architecture diagram](docs/arch_diagram.svg)
 
 ### Terraform infrastructure
 
-Although there is only one environment of Grafana (prod), the terraform infrastructure was designed to enable multiple environments if the need arises. There is a primary module in terraform/modules/grafana which essentially includes the entire core infrastructure. The environments in the terraform/env folder each use this module with variables relevant to that environment. There is also an inline project in terraform/common which creates the common KMS. Any parameters that may be needed by the server (such as secrets, s3 name, rds url) are also deployed as SSM (systems manager) parameters.
+Although there is only one environment of Grafana (prod), the terraform infrastructure was designed to enable multiple environments if the need arises. There is a primary module in [terraform/modules/grafana](terraform/modules/grafana) which essentially includes the entire core infrastructure. The environments in the [terraform/env](terraform/env) folder each use this module with variables relevant to that environment. There is also an inline project in [terraform/common](terraform/common) which creates the common KMS. Any parameters that may be needed by the server (such as secrets, s3 name, rds url) are also deployed as SSM (systems manager) parameters.
