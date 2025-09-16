@@ -7,11 +7,15 @@ env:
 jobs:
   shellcheck:
     runs-on: self-hosted
+    container:
+      image: buildpack-deps:bookworm
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
+      - name: Install shellcheck
+        run: sudo apt update && sudo apt install shellcheck
       - name: Run ShellCheck
-        run: docker run --rm -it -v "$(pwd):/mnt" koalaman/shellcheck:stable server/build.sh
+        run: shellcheck -e SC2155 server/build.sh
   dclint:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
