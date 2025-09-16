@@ -9,6 +9,7 @@ jobs:
     runs-on: self-hosted
     container:
       image: koalaman/shellcheck:latest
+      entrypoint: ["/bin/sh", "-c"]
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
