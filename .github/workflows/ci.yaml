@@ -7,14 +7,11 @@ env:
 jobs:
   shellcheck:
     runs-on: self-hosted
-    container:
-      image: koalaman/shellcheck:latest
-      entrypoint: ["/bin/sh", "-c"]
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
       - name: Run ShellCheck
-        run: shellcheck -e SC2155 server/build.sh
+        run: docker run --rm -it -v "$(pwd):/mnt" koalaman/shellcheck:stable server/build.sh
   dclint:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
