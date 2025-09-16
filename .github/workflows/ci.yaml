@@ -7,6 +7,9 @@ env:
 jobs:
   shellcheck:
     runs-on: self-hosted
+    container:
+      image: buildpack-deps:bookworm
+      options: --user root
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
