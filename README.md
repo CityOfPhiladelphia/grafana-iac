@@ -32,13 +32,13 @@ Upsides of using `docker-compose` over Kubernetes:
 
 #### Server provisioning
 
-Upon launching an EC2 from the autoscaling group (or directly from the launch template), a short userdata script runs which downloads this Git repository and then executes the `server/build.sh` script.
+Upon launching an EC2 from the autoscaling group (or directly from the launch template), a short userdata script runs which downloads this Git repository and then executes the [servers/build.sh](server/build.sh) script.
 
-The `servers/build.sh` script is a bit longer, it takes about 3 minutes to run and mostly just involves installing the required tools (mainly Docker), then parameterizes the docker configuration with values from the AWS infrastructure, then starts the docker-compose stack.
+The [servers/build.sh](servers/build.sh) script is a bit longer, it takes about 3 minutes to run and mostly just involves installing the required tools (mainly Docker), then parameterizes the docker configuration with values from the AWS infrastructure, then starts the docker-compose stack.
 
 ### AWS Infrastructure
 
-AWS infrastructure is deployed with Terraform. Although the application stack is currently deployed as a monolithic server, the AWS infrastructure was still designed in a way to enable future migration to a clustered Kuberenetes stack.
+AWS infrastructure is deployed with Terraform. Although the application stack is currently deployed as a monolithic server, the AWS infrastructure was still designed in a way to enable future migration to a clustered Kubernetes stack.
 
 #### Architecture Diagram
 
