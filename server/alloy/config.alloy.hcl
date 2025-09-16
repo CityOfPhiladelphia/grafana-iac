@@ -223,10 +223,9 @@ loki.write "local" {
   endpoint {
     // This is a local URL that only works because Alloy and Loki are on the same machine
     url = "http://localhost:3100/loki/api/v1/push"
-  }
-
-  basic_auth {
-      username = sys.env("LOKI_USER")
-      password = sys.env("LOKI_PASSWORD")
+    basic_auth {
+        username = sys.env("LOKI_USER")
+        password = sys.env("LOKI_PASSWORD")
+    }
   }
 }
