@@ -47,3 +47,34 @@ AWS infrastructure is deployed with Terraform. Although the application stack is
 ### Terraform infrastructure
 
 Although there is only one environment of Grafana (prod), the terraform infrastructure was designed to enable multiple environments if the need arises. There is a primary module in [terraform/modules/grafana](terraform/modules/grafana) which essentially includes the entire core infrastructure. The environments in the [terraform/env](terraform/env) folder each use this module with variables relevant to that environment. There is also an inline project in [terraform/common](terraform/common) which creates the common KMS. Any parameters that may be needed by the server (such as secrets, s3 name, rds url) are also deployed as SSM (systems manager) parameters.
+
+### CI/CD infrastructure
+
+Use of the CI/CD enables automatic deployment and testing of the Grafana infrastructure.
+
+#### CI - All branches and pull requests
+
+* tflint - Checks invalid values, prohibits poor coding practices
+* terraform fmt - Ensures consistent formatting
+* terraform plan - Investigate what Terraform will do perform merging to main
+
+#### CD - Main branch only
+
+* terraform apply - Deploys Terraform infrastructure
+* [indirect] On launch, a server downloads the code from the main branch
+
+## Development
+
+When developing new features, it is best to test the full functionality before merging to `main`. This is because the CI integration, while thorough for verifying the Terraform code itself, does not verify that the actual code will work as intended.
+
+### Getting credentials locally
+
+Check out the credentials that are pulled from Keeper in the [.github/workflows](.github/workflows) files. Set those up locally.
+
+### Developing AWS / Terraform code
+
+Just use `terraform apply` locally from your development machine.
+
+### Developing server configuration
+
+To test server configuration (the server/ folder), push your code to a non-main branch and update the `build_branch` parameter in terraform (in terraform/env/ folder) to that branch name. Then, use Terraform apply to update the launch template to pull from that new build branch, then replace the server. Since we only have the `prod` environment, this would cause outage. Make sure to change the `build_branch` back to main before merging the changes to main.
