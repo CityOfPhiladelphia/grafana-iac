@@ -67,6 +67,8 @@ Use of the CI/CD enables automatic deployment and testing of the Grafana infrast
 
 When developing new features, it is best to test the full functionality before merging to `main`. This is because the CI integration, while thorough for verifying the Terraform code itself, does not verify that the actual code will work as intended.
 
+Since we only budgeted a single environment, the prod environment, there is no way to fully test development without downtimes. Please work with Ryan Weast. In the future, if this tool is well utilized, we will add more environments.
+
 ### Getting credentials locally
 
 Check out the credentials that are pulled from Keeper in the [.github/workflows](.github/workflows) files. Set those up locally.
