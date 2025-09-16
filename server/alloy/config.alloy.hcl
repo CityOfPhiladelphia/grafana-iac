@@ -15,6 +15,18 @@ discovery.relabel "integrations_node_exporter" {
   }
 
   rule {
+    // Set the app name
+    target_label = "app_name"
+    replacement = sys.env("APP_NAME")
+  }
+
+  rule {
+    // Set the env name
+    target_label = "env_name"
+    replacement = sys.env("ENV_NAME")
+  }
+
+  rule {
     // Set a standard job name for all node_exporter metrics
     target_label = "job"
     replacement = "integrations/node_exporter"
@@ -142,6 +154,18 @@ discovery.relabel "logs_integrations_integrations_node_exporter_journal_scrape" 
     source_labels = ["__journal_priority_keyword"]
     target_label  = "level"
   }
+
+  rule {
+    // Set the app name
+    target_label = "app_name"
+    replacement = sys.env("APP_NAME")
+  }
+
+  rule {
+    // Set the env name
+    target_label = "env_name"
+    replacement = sys.env("ENV_NAME")
+  }
 }
 
 // Define a relabeling rule to create a service name from the container name.
@@ -160,6 +184,17 @@ discovery.relabel "logs_integrations_docker" {
     replacement  = constants.hostname
   }
 
+  rule {
+    // Set the app name
+    target_label = "app_name"
+    replacement = sys.env("APP_NAME")
+  }
+
+  rule {
+    // Set the env name
+    target_label = "env_name"
+    replacement = sys.env("ENV_NAME")
+  }
 }
 
 // Collect logs from files for node_exporter

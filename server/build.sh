@@ -53,6 +53,9 @@ sudo yum update -y
 sudo dnf install -y alloy
 # Copy our config into the right file
 sudo cp alloy/config.alloy.hcl /etc/alloy/config.alloy
+# Add environment
+echo "APP_NAME=$APP_NAME" | sudo tee -a /etc/sysconfig/alloy >/dev/null
+echo "ENV_NAME=$ENV_NAME" | sudo tee -a /etc/sysconfig/alloy >/dev/null
 # Start alloy!
 sudo systemctl start alloy
 sudo systemctl enable alloy.service
