@@ -7,7 +7,7 @@ env:
 jobs:
   shellcheck:
     runs-on: self-hosted
-    # container: buildpack-deps:bookworm
+    container: buildpack-deps:bookworm
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
@@ -17,7 +17,7 @@ jobs:
           scandir: "./server"
   dclint:
     runs-on: self-hosted
-    # container: buildpack-deps:bookworm
+    container: buildpack-deps:bookworm
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
