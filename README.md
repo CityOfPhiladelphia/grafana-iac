@@ -58,7 +58,7 @@ Use of the CI/CD enables automatic deployment and testing of the Grafana infrast
 * terraform fmt - Ensures consistent formatting
 * terraform plan - Investigate what Terraform will do perform merging to main
 * dclint - Lints [docker-compose.yaml](server/docker/docker-compose.yaml)
-* shellcheck - Lints [build.sh](server/build.sg)
+* shellcheck - Lints [build.sh](server/build.sh)
 
 #### CD - Main branch only
 
