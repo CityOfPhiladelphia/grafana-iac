@@ -11,3 +11,7 @@
 ### Uncontainerized
 
 * Alloy - Meta monitoring tool. Installed on the base ec2 for maximum metric collection information
+
+## Architecture Diagram
+
+![architecture diagram](docs/arch_diagram.svg)
