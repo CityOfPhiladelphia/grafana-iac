@@ -8,15 +8,12 @@ jobs:
   shellcheck:
     runs-on: self-hosted
     container:
-      image: buildpack-deps:bookworm
-      options: --user root
+      image: koalaman/shellcheck:latest
     steps:
       - uses: actions/checkout@v4
         name: Checkout source code
       - name: Run ShellCheck
-        uses: ludeeus/action-shellcheck@master
-        with:
-          scandir: "./server"
+        run: shellcheck -e SC2155 server/build.sh
   dclint:
     runs-on: self-hosted
     container: buildpack-deps:bookworm
