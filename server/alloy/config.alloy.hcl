@@ -88,10 +88,15 @@ prometheus.scrape "scraper" {
 // Configure a prometheus.remote_write component to send metrics to a Prometheus server.
 prometheus.remote_write "local" {
   endpoint {
-    url = "http://localhost:8080/api/v1/push"
+    url = "http://localhost:9090/api/v1/push"
 
     headers = {
       "X-Scope-OrgID" = "main",
+    }
+
+    basic_auth {
+      username = sys.env("PROMETHEUS_USER")
+      password = sys.env("PROMETHEUS_PASSWORD")
     }
   }
 }
@@ -218,5 +223,9 @@ loki.write "local" {
   endpoint {
     // This is a local URL that only works because Alloy and Loki are on the same machine
     url = "http://localhost:3100/loki/api/v1/push"
+    basic_auth {
+        username = sys.env("LOKI_USER")
+        password = sys.env("LOKI_PASSWORD")
+    }
   }
 }
