@@ -11,6 +11,7 @@ resource "aws_db_instance" "postgres" {
   storage_type               = "gp3"
   engine                     = "postgres"
   engine_version             = "17.4"
+  backup_retention_period    = 7
   db_subnet_group_name       = aws_db_subnet_group.postgres.name
   db_name                    = "postgres"
   username                   = data.secretsmanager_login.db.login
