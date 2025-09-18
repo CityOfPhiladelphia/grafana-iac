@@ -16,7 +16,8 @@ resource "aws_db_instance" "postgres" {
   db_name                    = "postgres"
   username                   = data.secretsmanager_login.db.login
   password                   = data.secretsmanager_login.db.password
-  auto_minor_version_upgrade = true
+  apply_immediately          = true
+  auto_minor_version_upgrade = false
   storage_encrypted          = true
   kms_key_id                 = data.aws_ssm_parameter.kms_arn.value
   deletion_protection        = !var.dev_mode
