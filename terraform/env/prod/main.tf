@@ -28,6 +28,10 @@ provider "aws" {
 provider "secretsmanager" {
 }
 
+variable "ec2_ami_id" {
+  type = string
+}
+
 module "grafana" {
   source = "../../modules/grafana"
 
@@ -64,6 +68,7 @@ module "grafana" {
   # EC2
   ec2_instance_type = "t3.large"
   ssh_key_name      = "eks-grafana"
+  ec2_ami_id        = var.ec2_ami_id
   build_branch      = "main"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
