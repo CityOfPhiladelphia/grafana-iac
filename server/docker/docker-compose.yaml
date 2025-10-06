@@ -2,7 +2,7 @@ name: Grafana
 
 services:
   grafana:
-    image: grafana/grafana:12.2.1
+    image: grafana/grafana:12.2
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
       - GF_AUTH_ANONYMOUS_ENABLED=false
