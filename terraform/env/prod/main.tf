@@ -66,10 +66,10 @@ module "grafana" {
     }
   }
   # EC2
-  ec2_instance_type = "t3.large"
+  ec2_instance_type = "m5a.large"
   ssh_key_name      = "eks-grafana"
   ec2_ami_id        = var.ec2_ami_id
-  build_branch      = "main"
+  build_branch      = "enhance-maintenance-documentation"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
 }
