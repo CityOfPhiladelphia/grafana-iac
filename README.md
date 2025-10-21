@@ -65,6 +65,10 @@ Use of the CI/CD enables automatic deployment and testing of the Grafana infrast
 * terraform apply - Deploys Terraform infrastructure
 * [indirect] On launch, a server downloads the code from the main branch
 
+## Maintenance
+
+See [docs/maintenance.md](/docs/maintenance.md)
+
 ## Development
 
 When developing new features, it is best to test the full functionality before merging to `main`. This is because the CI integration, while thorough for verifying the Terraform code itself, does not verify that the actual code will work as intended.

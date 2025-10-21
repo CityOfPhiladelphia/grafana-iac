@@ -25,8 +25,6 @@ export PROMETHEUS_PASSWORD=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/
 htpasswd -cBb ./docker/nginx/.htpasswd.loki "$LOKI_USER" "$LOKI_PASSWORD"
 htpasswd -cBb ./docker/nginx/.htpasswd.prometheus "$PROMETHEUS_USER" "$PROMETHEUS_PASSWORD"
 
-# Run all these commands as ec2-user (required because it establishes new docker group)
-sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
 # Get Grafana parameters
 # DB
 export GF_DATABASE_HOST=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/rds_host" --query "Parameter.Value" --output text)
@@ -36,14 +34,19 @@ export GF_DATABASE_PASSWORD=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME
 # DNS
 export GF_SERVER_DOMAIN=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/domain_name" --query "Parameter.Value" --output text)
 export GF_SERVER_ROOT_URL="https://$GF_SERVER_DOMAIN/"
-# -i logs us in as shell so our pwd gets reset
-cd ~/grafana-iac/server
-# Update loki-config.yaml with correct s3 bucket name
 export LOKI_S3_BUCKET=$(aws ssm get-parameter --name "/$APP_NAME/$ENV_NAME/grafana_s3_name" --query "Parameter.Value" --output text)
+
 envsubst <docker/loki/loki-config-template.yaml >docker/loki/loki-config.yaml
 envsubst <docker/mimir/mimir-template.yaml >docker/mimir/mimir.yaml
-# Now, docker compose
-docker-compose -f docker/docker-compose.yaml up -d
+envsubst <docker/start-template.sh >docker/start.sh
+chmod +x docker/start.sh
+rm docker/start-template.sh
+
+# Run all these commands as ec2-user (required because it establishes new docker group)
+sudo -u ec2-user --preserve-env=APP_NAME,ENV_NAME -i <<'EOF'
+# -i logs us in as shell so our pwd gets reset
+cd ~/grafana-iac/server/docker
+./start.sh
 EOF
 
 # Good! Loki, Grafana, and Prometheus are now up and running. Time to install alloy for local monitoring
