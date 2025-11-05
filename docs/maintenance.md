@@ -13,6 +13,7 @@ Downtime: While there could be future optimization to reduce this, currently OS 
     1. Merge the pull request, then wait for the Terraform apply job to run
     1. *Note* This will not actually update or replace any servers, it just means the next server launched will have the newer AMI.
 1. SSH onto the old server and stop all docker containers
+    1. `docker stop $(docker ps -a -q)`      
 1. Launch new server
     1. Navigate to AWS web console -> EC2 -> Autoscaling
     1. Set the desired, minimum, and maximum capacity to 2.
