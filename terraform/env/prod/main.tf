@@ -63,6 +63,14 @@ module "grafana" {
     mulesoftprodvpc = {
       name = "Mulesoft Prod VPC"
       cidr = "10.30.72.0/21"
+    },
+    airflowtestvpc = {
+      name = "Airflow Test VPC"
+      cidr = "10.30.189.0/24"
+    },
+    airflowprodvpc = {
+      name = "Airflow Prod VPC"
+      cidr = "10.30.202.0/24"
     }
   }
   # EC2
