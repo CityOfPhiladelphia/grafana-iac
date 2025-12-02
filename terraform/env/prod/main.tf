@@ -1,12 +1,12 @@
 terraform {
   required_version = "~> 1.12"
 
-  cloud {
-    organization = "Philadelphia"
-
-    workspaces {
-      name = "grafana-prd"
-    }
+  backend "s3" {
+    bucket = "phl-citygeo-terraform-state"
+    # CHANGE ME!
+    key          = "grafana/prod"
+    region       = "us-east-1"
+    use_lockfile = true
   }
 
   required_providers {
@@ -23,6 +23,11 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
+
+  assume_role {
+    role_arn     = "arn:aws:iam::975050025792:role/TFRole"
+    session_name = "tf"
+  }
 }
 
 provider "secretsmanager" {
