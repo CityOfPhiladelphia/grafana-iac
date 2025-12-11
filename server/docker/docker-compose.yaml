@@ -60,7 +60,7 @@ services:
     restart: always
 
   loki:
-    image: grafana/loki:3.5.8@sha256:00981fd9455db8589c3aa6d06744af3138c4b2c32fdec62101e92c7a704b2642
+    image: grafana/loki:3.6.3@sha256:cd6e176883a90c21755f0315688668991634143423f75bdedfef41441b0fdc3c
     # Expose loki port internally so nginx can access it
     volumes:
       - ./loki/loki-config.yaml:/etc/loki/local-config.yaml
