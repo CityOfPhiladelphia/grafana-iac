@@ -101,7 +101,7 @@ services:
 
   nginx:
     # dclint disable-line
-    image: nginx:stable@sha256:3048d7a6bad5fb1a1a2516249e570b85645a00411bad6b3126983577f040bb5f
+    image: nginx:stable@sha256:4a8e7d03e7c8b3fadfd47a886228f9b08eb9a99416e342d0592e9b0af73fba9d
     depends_on:
       - loki
       - mimir
