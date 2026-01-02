@@ -83,7 +83,7 @@ services:
   #    - loki
 
   mimir:
-    image: grafana/mimir:2.17.3@sha256:e648c344d8d3c46ab04174c9b1d9fdc76836e6ead6335980081f8ee34ede9f14
+    image: grafana/mimir:3.0.2@sha256:4231caf9be780e5d9113449e57a0258d388124aca74c0a14b9cf8857e23aad76
     # Expose mimir port internally so nginx can access it
     volumes:
       - ./mimir/mimir.yaml:/etc/mimir.yaml
