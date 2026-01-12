@@ -10,6 +10,10 @@ terraform {
       source  = "keeper-security/secretsmanager"
       version = "1.1.7"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.1.0"
+    }
   }
 }
 

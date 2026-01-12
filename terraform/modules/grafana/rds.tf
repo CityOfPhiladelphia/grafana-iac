@@ -24,6 +24,7 @@ resource "aws_db_instance" "postgres" {
   skip_final_snapshot        = var.dev_mode
   instance_class             = "db.t4g.micro"
   vpc_security_group_ids     = [aws_security_group.rds.id]
+  multi_az                   = var.rds_multi_az
 
   tags = local.default_tags
 

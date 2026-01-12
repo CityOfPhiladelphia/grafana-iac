@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_kms_key" "common" {
   description = "${var.app_name} common"
   key_usage   = "ENCRYPT_DECRYPT"
@@ -49,9 +47,42 @@ resource "aws_kms_key" "common" {
             "kms:GrantIsForAWSResource" = true
           }
         }
+      },
+      {
+        Sid    = "Allow cloudwatch logs to use"
+        Effect = "Allow"
+        Principal = {
+          Service = "logs.us-east-1.amazonaws.com"
+        }
+        Action = [
+          "kms:Encrypt",
+          "kms:Decrypt",
+          "kms:ReEncrypt*",
+          "kms:GenerateDataKey*",
+          "kms:Describe*"
+        ]
+        Resource = "*"
+        Condition = {
+          ArnLike = {
+            "kms:EncryptionContext:aws:logs:arn" = "arn:aws:logs:us-east-1:${data.aws_caller_identity.current.account_id}:*"
+          }
+        }
+      },
+      {
+        Sid    = "Allow eventbridge to use key"
+        Effect = "Allow"
+        Principal = {
+          Service = "events.amazonaws.com"
+        }
+        Action = [
+          "kms:GenerateDataKey",
+          "kms:Decrypt"
+        ]
+        Resource = "*"
       }
     ]
   })
+
 
   tags = local.default_tags
 }
@@ -59,16 +90,4 @@ resource "aws_kms_key" "common" {
 resource "aws_kms_alias" "common" {
   name          = "alias/${var.app_name}"
   target_key_id = aws_kms_key.common.key_id
-}
-
-resource "aws_ssm_parameter" "kms_arn" {
-  name  = "/${var.app_name}/common/kms_arn"
-  value = aws_kms_key.common.arn
-  type  = "String"
-}
-
-resource "aws_ssm_parameter" "kms_id" {
-  name  = "/${var.app_name}/common/kms_id"
-  value = aws_kms_key.common.key_id
-  type  = "String"
 }
