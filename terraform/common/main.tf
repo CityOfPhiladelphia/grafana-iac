@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/aws"
       version = "6.25.0"
     }
+    secretsmanager = {
+      source  = "keeper-security/secretsmanager"
+      version = ">= 1.1.5"
+    }
   }
 
   backend "s3" {

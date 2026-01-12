@@ -85,4 +85,19 @@ module "grafana" {
   build_branch      = "enhance-maintenance-documentation"
   # prod remote SG
   ssh_sg_id = "sg-0ef9b74fa74804bcb"
+  # RDS
+  rds_multi_az = true
+
+  # EKS migration
+  bootstrap      = false
+  eks_subnet_ids = ["subnet-0d0d5a4bdbaf916d1", "subnet-00eb4cfd73abefd2e"]
+  # IAM Roles to add to EKS Admin
+  eks_admins_iam_arns = [
+    # SSO roles
+    "arn:aws:iam::975050025792:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AWS-mulesoft-infra-admins_a23294be18f9f843",
+    "arn:aws:iam::975050025792:role/aws-reserved/sso.amazonaws.com/AWSReservedSSO_AWS-mulesoft-infra-devs_128f50c8d80a23d4",
+    # Terraform role
+    "arn:aws:iam::975050025792:role/TFRole"
+  ]
+  kubernetes_version = "1.34"
 }
