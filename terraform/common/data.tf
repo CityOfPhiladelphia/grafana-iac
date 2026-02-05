@@ -8,8 +8,8 @@ locals {
 
 data "aws_caller_identity" "current" {}
 
-// Shared-GSG -> Github -> Keepercfg
+// Shared-GSG -> Grafana -> Keeper Key
 data "secretsmanager_login" "keeper" {
-  path = "l4pqeAaAA7HGzEXaNdKVWQ"
+  path = "CG_TIwl5Hqor1cTDLCywYA"
 }
 

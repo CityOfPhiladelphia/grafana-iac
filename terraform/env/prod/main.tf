@@ -76,7 +76,11 @@ module "grafana" {
     airflowprodvpc = {
       name = "Airflow Prod VPC"
       cidr = "10.30.202.0/24"
-    }
+    },
+    citygeovarietytestvpc = {
+      name = "citygeo variety test vpc"
+      cidr = "10.30.187.0/24"
+    },
   }
   # EC2
   ec2_instance_type = "m5a.large"
