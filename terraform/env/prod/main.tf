@@ -77,17 +77,9 @@ module "grafana" {
       name = "Airflow Prod VPC"
       cidr = "10.30.202.0/24"
     },
-    airflowdevvpc = {
-      name = "airflow dev vpc"
+    citygeovarietytestvpc = {
+      name = "citygeo variety test vpc"
       cidr = "10.30.187.0/24"
-    },
-    airflowdevunroutablevpc = {
-      name = "airflow dev unroutable vpc"
-      cidr = "100.64.0.0/16"
-    },
-    testfullaccess = {
-      name = "test full access delete soon"
-      cidr = "0.0.0.0/0"
     },
   }
   # EC2
