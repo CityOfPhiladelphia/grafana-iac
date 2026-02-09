@@ -8,7 +8,7 @@ terraform {
     }
     secretsmanager = {
       source  = "keeper-security/secretsmanager"
-      version = ">= 1.1.5"
+      version = "1.1.7"
     }
   }
 
