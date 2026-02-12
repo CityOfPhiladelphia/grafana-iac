@@ -81,6 +81,10 @@ module "grafana" {
       name = "citygeo variety test vpc"
       cidr = "10.30.187.0/24"
     },
+    citygeovarietyprodvpc = {
+      name = "citygeo variety prod vpc"
+      cidr = "10.30.168.0/23"
+    },
   }
   # EC2
   ec2_instance_type = "m5a.large"

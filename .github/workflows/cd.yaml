@@ -1,18 +1,18 @@
-name: CD
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  tfapply:
-    strategy:
-      matrix:
-        TF_DIR: [./terraform/env/prod, ./terraform/common]
-    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_apply.yaml@main
-    with:
-      tf_dir: ${{ matrix.TF_DIR }}
-      tf_token_keeper_path: sd33hj2cVYiRB4TEhAG_jg/field/password
-      aws_access_key_id_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/login
-      aws_secret_access_key_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/password
-    secrets: inherit
+#name: CD
+#on:
+#  push:
+#    branches:
+#      - main
+#
+#jobs:
+#  tfapply:
+#    strategy:
+#      matrix:
+#        TF_DIR: [./terraform/env/prod, ./terraform/common]
+#    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_apply.yaml@main
+#    with:
+#      tf_dir: ${{ matrix.TF_DIR }}
+#      tf_token_keeper_path: sd33hj2cVYiRB4TEhAG_jg/field/password
+#      aws_access_key_id_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/login
+#      aws_secret_access_key_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/password
+#    secrets: inherit
