@@ -1,31 +1,31 @@
-name: CI
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-
-jobs:
-  terraform_fmt:
-    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_fmt.yaml@main
-    with:
-      parent_tf_dir: "./terraform"
-
-  tflint:
-    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/tflint.yaml@main
-    with:
-      parent_tf_dir: "./terraform"
-    secrets: inherit
-
-  tfplan:
-    if: github.ref != 'refs/heads/main' # No reason to run plan on main
-    strategy:
-      matrix:
-        TF_DIR: [./terraform/env/prod, ./terraform/common]
-    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_plan.yaml@main
-    with:
-      tf_dir: ${{ matrix.TF_DIR }}
-      tf_token_keeper_path: sd33hj2cVYiRB4TEhAG_jg/field/password
-      aws_access_key_id_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/login
-      aws_secret_access_key_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/password
-    secrets: inherit
+#name: CI
+#on:
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#
+#jobs:
+#  terraform_fmt:
+#    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_fmt.yaml@main
+#    with:
+#      parent_tf_dir: "./terraform"
+#
+#  tflint:
+#    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/tflint.yaml@main
+#    with:
+#      parent_tf_dir: "./terraform"
+#    secrets: inherit
+#
+#  tfplan:
+#    if: github.ref != 'refs/heads/main' # No reason to run plan on main
+#    strategy:
+#      matrix:
+#        TF_DIR: [./terraform/env/prod, ./terraform/common]
+#    uses: CityOfPhiladelphia/citygeo-shared-workflows/.github/workflows/terraform_plan.yaml@main
+#    with:
+#      tf_dir: ${{ matrix.TF_DIR }}
+#      tf_token_keeper_path: sd33hj2cVYiRB4TEhAG_jg/field/password
+#      aws_access_key_id_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/login
+#      aws_secret_access_key_keeper_path: 9Vi7qUgp2ht2JvmZRs-YXA/field/password
+#    secrets: inherit

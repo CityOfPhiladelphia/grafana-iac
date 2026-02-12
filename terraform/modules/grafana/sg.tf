@@ -128,25 +128,6 @@ resource "aws_vpc_security_group_egress_rule" "eks_node_all_to_outbound" {
   cidr_ipv4   = "0.0.0.0/0"
 }
 
-// Kafka security group
-resource "aws_security_group" "kafka" {
-  name        = "${var.app_name}-${var.env_name}-kafka"
-  description = "SG for Kafka"
-  vpc_id      = var.vpc_id
-
-  tags = merge(local.default_tags, { Name = "${var.app_name}-${var.env_name}-kafka" })
-}
-
-resource "aws_vpc_security_group_ingress_rule" "kafka_from_eks" {
-  security_group_id = aws_security_group.kafka.id
-
-  description                  = "Kafka inbound access from EKS node group"
-  ip_protocol                  = "tcp"
-  from_port                    = 9094
-  to_port                      = 9094
-  referenced_security_group_id = aws_security_group.eks_node.id
-}
-
 // RDS security group
 resource "aws_security_group" "rds" {
   name        = "${var.app_name}-${var.env_name}-rds"
